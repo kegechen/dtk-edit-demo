@@ -52,9 +52,18 @@
 #include <QtWidgets>
 #include <DTitlebar>
 #include <DDialog>
+#include <DSettings>
+#include <DSettingsDialog>
+#include <DSettingsOption>
+#include <qsettingbackend.h>
+#include <DGuiApplicationHelper>
+#include <DPlatformTheme>
+
 #include "mainwindow.h"
 //! [0]
 
+DCORE_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 //! [1]
 MainWindow::MainWindow()
     : textEdit(new QPlainTextEdit)
@@ -202,13 +211,12 @@ void MainWindow::createActions()
 
 //! [20]
 
-    fileMenu->addSeparator();
-
-    const QIcon exitIcon = QIcon::fromTheme("application-exit");
-    QAction *exitAct = fileMenu->addAction(exitIcon, tr("E&xit"), this, &QWidget::close);
-    exitAct->setShortcuts(QKeySequence::Quit);
-//! [20]
-    exitAct->setStatusTip(tr("Exit the application"));
+    // fileMenu->addSeparator();
+//     const QIcon exitIcon = QIcon::fromTheme("application-exit");
+//     QAction *exitAct = fileMenu->addAction(exitIcon, tr("E&xit"), this, &QWidget::close);
+//     exitAct->setShortcuts(QKeySequence::Quit);
+// //! [20]
+//     exitAct->setStatusTip(tr("Exit the application"));
 
 //! [21]
     QMenu *editMenu = new QMenu(tr("&Edit"));
@@ -242,14 +250,39 @@ void MainWindow::createActions()
     connect(pasteAct, &QAction::triggered, textEdit, &QPlainTextEdit::paste);
     editMenu->addAction(pasteAct);
     // editToolBar->addAction(pasteAct);
-
     // menuBar()->addSeparator();
 
+    QAction *settingsAct = new QAction(tr("&Settings"));
+    settingsAct->setShortcut(QKeySequence::fromString("Alt+S"));
+    connect(settingsAct, &QAction::triggered, this, [this](){
+        QSettings qsettings(qApp->organizationName(), qApp->applicationName());
+        QSettingBackend backend(qsettings.fileName());
+
+        QPointer<DSettings> settings = DSettings::fromJsonFile(":/settings.json");
+
+        DPlatformTheme *theme = DGuiApplicationHelper::instance()->systemTheme();
+        int radius = theme->windowRadius();
+        QPointer<DSettingsOption> opt = settings->option("Base.WindowSettings.Radius");
+        if (opt) {
+            // radius < 8  ==> small  0
+            // radius == 8 ==> middle 1
+            // radius > 8  ==> large  2
+            opt->setValue(radius < 8 ? 0 : (radius > 8 ? 2 : 1));
+        }
+
+        settings->setBackend(&backend);
+        DSettingsDialog dsd(this);
+        dsd.updateSettings(settings);
+        dsd.exec();
+    });
+
+
     // shortcuts in mainwindow
-    addActions({newAct, openAct, saveAct, saveAsAct});
+    addActions({newAct, openAct, saveAct, saveAsAct, settingsAct});
 
     mainMenu->addMenu(fileMenu);
     mainMenu->addMenu(editMenu);
+    mainMenu->addAction(settingsAct);
     titlebar()->setMenu(mainMenu);
 
     titlebar()->setIcon(QIcon::fromTheme("deepin-editor"));

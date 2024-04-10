@@ -1,0 +1,89 @@
+{
+    "groups": [
+        {
+            "key": "base",
+            "name": "Base settings",
+            "groups": [
+                {
+                    "key": "appSettings",
+                    "name": "App settings",
+                    "options": [
+                        {
+                            "key": "singleApp",
+                            "type": "switchbutton",
+                            "name": "Single application",
+                            "default": true
+                        },
+                        {
+                            "key": "useInactiveColorGroup",
+                            "type": "switchbutton",
+                            "name": "Use inactive color group",
+                            "default": true
+                        },
+                        {
+                            "key": "dontSaveApplicationTheme",
+                            "type": "switchbutton",
+                            "name": "Don't save application theme",
+                            "default": false
+                        }
+                    ]
+                },
+                {
+                    "key": "windowSettings",
+                    "name": "Window settings",
+                    "options": [
+                        {
+                            "key": "enableBlur",
+                            "name": "Enable window blur",
+                            "type": "switchbutton",
+                            "default": false
+                        },
+                        {
+                            "key": "radius",
+                            "name": "Window radius",
+                            "type": "buttongroup",
+                            "items": ["Small","Middle","Large"],
+                            "default": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "shortcuts",
+            "name": "Shortcuts",
+            "groups": [
+                {
+                    "key": "ternimal",
+                    "name": "File option",
+                    "options": [
+                        {
+                            "key": "new",
+                            "name": "New file",
+                            "type": "shortcut",
+                            "default": "Ctrl+N"
+                        },
+                        {
+                            "key": "open",
+                            "name": "Open",
+                            "type": "shortcut",
+                            "default": "Ctrl+O"
+                        },
+                        {
+                            "key": "save",
+                            "name": "Save",
+                            "type": "shortcut",
+                            "default": "Ctrl+S"
+                        },
+                        {
+                            "key": "saveAs",
+                            "name": "Save As",
+                            "type": "shortcut",
+                            "default": "Ctrl+Shift+S"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
