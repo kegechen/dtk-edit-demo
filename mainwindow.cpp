@@ -62,6 +62,7 @@ MainWindow::MainWindow()
     setCentralWidget(textEdit);
 
     createActions();
+
     createStatusBar();
 
     readSettings();
@@ -270,7 +271,8 @@ void MainWindow::createActions()
 void MainWindow::createStatusBar()
 //! [32] //! [33]
 {
-    statusBar()->showMessage(tr("Ready"));
+    // statusBar()->showMessage(tr("Ready"));
+    sendMessage(QIcon::fromTheme("icon_ok"), tr("Ready"));
 }
 //! [33]
 
@@ -345,7 +347,8 @@ void MainWindow::loadFile(const QString &fileName)
 #endif
 
     setCurrentFile(fileName);
-    statusBar()->showMessage(tr("File loaded"), 2000);
+    // statusBar()->showMessage(tr("File loaded"), 2000);
+    sendMessage(QIcon::fromTheme("icon_ok"), tr("File loaded"));
 }
 //! [43]
 
@@ -376,7 +379,8 @@ bool MainWindow::saveFile(const QString &fileName)
     }
 
     setCurrentFile(fileName);
-    statusBar()->showMessage(tr("File saved"), 2000);
+    // statusBar()->showMessage(tr("File saved"), 2000);
+    sendMessage(QIcon::fromTheme("icon_ok"), tr("File saved"));
     return true;
 }
 //! [45]
