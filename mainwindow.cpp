@@ -252,6 +252,8 @@ void MainWindow::createActions()
     mainMenu->addMenu(editMenu);
     titlebar()->setMenu(mainMenu);
 
+    titlebar()->setIcon(QIcon::fromTheme("deepin-editor"));
+
 #endif // !QT_NO_CLIPBOARD
 
 //     QMenu *helpMenu = new QMenu(tr("&Help"));
@@ -431,7 +433,9 @@ void MainWindow::setCurrentFile(const QString &fileName)
     QString shownName = curFile;
     if (curFile.isEmpty())
         shownName = "untitled.txt";
+
     setWindowFilePath(shownName);
+    titlebar()->setTitle(shownName);
 }
 //! [47]
 
