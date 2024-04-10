@@ -1,4 +1,4 @@
-QT += widgets
+QT += widgets dtkcore dtkgui dtkwidget
 requires(qtConfig(filedialog))
 
 HEADERS       = mainwindow.h

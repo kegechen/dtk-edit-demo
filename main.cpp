@@ -49,11 +49,12 @@
 ****************************************************************************/
 
 //! [0]
-#include <QApplication>
+#include <DApplication>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
 #include "mainwindow.h"
+DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
@@ -62,10 +63,17 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    QApplication app(argc, argv);
-    QCoreApplication::setOrganizationName("QtProject");
-    QCoreApplication::setApplicationName("Application Example");
-    QCoreApplication::setApplicationVersion(QT_VERSION_STR);
+    DApplication app(argc, argv);
+    app.setOrganizationName("deepin");
+    app.setApplicationName("dtk-edit-demo");
+
+    // aboutdialog info
+    app.setApplicationVersion(DTK_VERSION_STR);
+    app.setApplicationDescription("this is a dtk edit demo");
+    app.setProductIcon(QIcon::fromTheme("deepin-editor"));
+    // icon on dock
+    app.setWindowIcon(QIcon::fromTheme("deepin-editor"));
+
     QCommandLineParser parser;
     parser.setApplicationDescription(QCoreApplication::applicationName());
     parser.addHelpOption();

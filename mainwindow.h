@@ -51,7 +51,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <DMainWindow>
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -60,8 +60,10 @@ class QPlainTextEdit;
 class QSessionManager;
 QT_END_NAMESPACE
 
+DWIDGET_USE_NAMESPACE
+
 //! [0]
-class MainWindow : public QMainWindow
+class MainWindow : public DMainWindow
 {
     Q_OBJECT
 
