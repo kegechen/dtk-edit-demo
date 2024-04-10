@@ -50,7 +50,7 @@
 
 //! [0]
 #include <QtWidgets>
-
+#include <DTitlebar>
 #include "mainwindow.h"
 //! [0]
 
@@ -165,16 +165,16 @@ void MainWindow::documentWasModified()
 void MainWindow::createActions()
 //! [17] //! [18]
 {
-
-    QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
-    QToolBar *fileToolBar = addToolBar(tr("File"));
+    QMenu *mainMenu = new QMenu(this);
+    QMenu *fileMenu = new QMenu(tr("&File"));
+    // QToolBar *fileToolBar = addToolBar(tr("File"));
     const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
     QAction *newAct = new QAction(newIcon, tr("&New"), this);
     newAct->setShortcuts(QKeySequence::New);
     newAct->setStatusTip(tr("Create a new file"));
     connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
     fileMenu->addAction(newAct);
-    fileToolBar->addAction(newAct);
+    // fileToolBar->addAction(newAct);
 
 //! [19]
     const QIcon openIcon = QIcon::fromTheme("document-open", QIcon(":/images/open.png"));
@@ -183,7 +183,7 @@ void MainWindow::createActions()
     openAct->setStatusTip(tr("Open an existing file"));
     connect(openAct, &QAction::triggered, this, &MainWindow::open);
     fileMenu->addAction(openAct);
-    fileToolBar->addAction(openAct);
+    // fileToolBar->addAction(openAct);
 //! [18] //! [19]
 
     const QIcon saveIcon = QIcon::fromTheme("document-save", QIcon(":/images/save.png"));
@@ -192,7 +192,7 @@ void MainWindow::createActions()
     saveAct->setStatusTip(tr("Save the document to disk"));
     connect(saveAct, &QAction::triggered, this, &MainWindow::save);
     fileMenu->addAction(saveAct);
-    fileToolBar->addAction(saveAct);
+    // fileToolBar->addAction(saveAct);
 
     const QIcon saveAsIcon = QIcon::fromTheme("document-save-as");
     QAction *saveAsAct = fileMenu->addAction(saveAsIcon, tr("Save &As..."), this, &MainWindow::saveAs);
@@ -210,8 +210,8 @@ void MainWindow::createActions()
     exitAct->setStatusTip(tr("Exit the application"));
 
 //! [21]
-    QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
-    QToolBar *editToolBar = addToolBar(tr("Edit"));
+    QMenu *editMenu = new QMenu(tr("&Edit"));
+    // QToolBar *editToolBar = addToolBar(tr("Edit"));
 //!
 #ifndef QT_NO_CLIPBOARD
     const QIcon cutIcon = QIcon::fromTheme("edit-cut", QIcon(":/images/cut.png"));
@@ -222,7 +222,7 @@ void MainWindow::createActions()
                             "clipboard"));
     connect(cutAct, &QAction::triggered, textEdit, &QPlainTextEdit::cut);
     editMenu->addAction(cutAct);
-    editToolBar->addAction(cutAct);
+    // editToolBar->addAction(cutAct);
 
     const QIcon copyIcon = QIcon::fromTheme("edit-copy", QIcon(":/images/copy.png"));
     QAction *copyAct = new QAction(copyIcon, tr("&Copy"), this);
@@ -231,7 +231,7 @@ void MainWindow::createActions()
                              "clipboard"));
     connect(copyAct, &QAction::triggered, textEdit, &QPlainTextEdit::copy);
     editMenu->addAction(copyAct);
-    editToolBar->addAction(copyAct);
+    // editToolBar->addAction(copyAct);
 
     const QIcon pasteIcon = QIcon::fromTheme("edit-paste", QIcon(":/images/paste.png"));
     QAction *pasteAct = new QAction(pasteIcon, tr("&Paste"), this);
@@ -240,20 +240,27 @@ void MainWindow::createActions()
                               "selection"));
     connect(pasteAct, &QAction::triggered, textEdit, &QPlainTextEdit::paste);
     editMenu->addAction(pasteAct);
-    editToolBar->addAction(pasteAct);
+    // editToolBar->addAction(pasteAct);
 
-    menuBar()->addSeparator();
+    // menuBar()->addSeparator();
+
+    // shortcuts in mainwindow
+    addActions({newAct, openAct, saveAct, saveAsAct});
+
+    mainMenu->addMenu(fileMenu);
+    mainMenu->addMenu(editMenu);
+    titlebar()->setMenu(mainMenu);
 
 #endif // !QT_NO_CLIPBOARD
 
-    QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
-    QAction *aboutAct = helpMenu->addAction(tr("&About"), this, &MainWindow::about);
-    aboutAct->setStatusTip(tr("Show the application's About box"));
+//     QMenu *helpMenu = new QMenu(tr("&Help"));
+//     QAction *aboutAct = helpMenu->addAction(tr("&About"), this, &MainWindow::about);
+//     aboutAct->setStatusTip(tr("Show the application's About box"));
 
-//! [22]
+// //! [22]
 
-    QAction *aboutQtAct = helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
-    aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
+//     QAction *aboutQtAct = helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
+//     aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
 //! [22]
 
 //! [23]
