@@ -50,10 +50,14 @@
 
 //! [0]
 #include <DApplication>
+#include <LogManager.h>
+
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
 #include "mainwindow.h"
+
+DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
@@ -73,6 +77,18 @@ int main(int argc, char *argv[])
     app.setProductIcon(QIcon::fromTheme("deepin-editor"));
     // icon on dock
     app.setWindowIcon(QIcon::fromTheme("deepin-editor"));
+
+    // Single instance
+    if (!app.setSingleInstance("dtk-edit-demo-key")) {
+        qWarning() << "app is already running！";
+        return -1;
+    }
+
+    // Console log
+    DLogManager::registerConsoleAppender();
+    // File log
+    DLogManager::registerFileAppender();
+    qDebug() << "log file path:" << DLogManager::getlogFilePath();
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QCoreApplication::applicationName());
