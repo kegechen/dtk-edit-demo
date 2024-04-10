@@ -51,6 +51,7 @@
 //! [0]
 #include <QtWidgets>
 #include <DTitlebar>
+#include <DDialog>
 #include "mainwindow.h"
 //! [0]
 
@@ -146,10 +147,10 @@ bool MainWindow::saveAs()
 void MainWindow::about()
 //! [13] //! [14]
 {
-   QMessageBox::about(this, tr("About Application"),
-            tr("The <b>Application</b> example demonstrates how to "
-               "write modern GUI applications using Qt, with a menu bar, "
-               "toolbars, and a status bar."));
+   // QMessageBox::about(this, tr("About Application"),
+   //          tr("The <b>Application</b> example demonstrates how to "
+   //             "write modern GUI applications using Qt, with a menu bar, "
+   //             "toolbars, and a status bar."));
 }
 //! [14]
 
@@ -315,6 +316,7 @@ bool MainWindow::maybeSave()
 {
     if (!textEdit->document()->isModified())
         return true;
+    /*
     const QMessageBox::StandardButton ret
         = QMessageBox::warning(this, tr("Application"),
                                tr("The document has been modified.\n"
@@ -329,6 +331,24 @@ bool MainWindow::maybeSave()
         break;
     }
     return true;
+*/
+    DDialog dlg(tr("Application"),
+                tr("The document has been modified.\n"
+                   "Do you want to save your changes?"));
+    dlg.addButtons({tr("Save"), tr("Discard"), tr("Cancel")});
+    dlg.setIcon(QIcon::fromTheme("dialog_warning"));
+    int res = dlg.exec();
+
+    switch (res) {
+    case 0: //save
+        return save();
+    case 2: // Cancel
+        return false;
+    default:
+        break;
+    }
+    return true;
+
 }
 //! [41]
 
@@ -338,9 +358,16 @@ void MainWindow::loadFile(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("Application"),
-                             tr("Cannot read file %1:\n%2.")
-                             .arg(QDir::toNativeSeparators(fileName), file.errorString()));
+
+        // QMessageBox::warning(this, tr("Application"),
+        //                      tr("Cannot read file %1:\n%2.")
+        //                      .arg(QDir::toNativeSeparators(fileName), file.errorString()));
+        DDialog dlg;
+        dlg.setIcon(QIcon::fromTheme("dialog-warning"));
+        dlg.setTitle(tr("Application"));
+        dlg.setMessage(tr("Cannot read file %1:\n%2.").
+                       arg(QDir::toNativeSeparators(fileName), file.errorString()));
+        dlg.exec();
         return;
     }
 
@@ -381,7 +408,8 @@ bool MainWindow::saveFile(const QString &fileName)
     QGuiApplication::restoreOverrideCursor();
 
     if (!errorMessage.isEmpty()) {
-        QMessageBox::warning(this, tr("Application"), errorMessage);
+        // QMessageBox::warning(this, tr("Application"), errorMessage);
+        DDialog(tr("Application"), errorMessage).exec();
         return false;
     }
 
