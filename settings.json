@@ -1,27 +1,27 @@
 {
     "groups": [
         {
-            "key": "base",
+            "key": "Base",
             "name": "Base settings",
             "groups": [
                 {
-                    "key": "appSettings",
+                    "key": "AppSettings",
                     "name": "App settings",
                     "options": [
                         {
-                            "key": "singleApp",
+                            "key": "SingleApp",
                             "type": "switchbutton",
                             "name": "Single application",
                             "default": true
                         },
                         {
-                            "key": "useInactiveColorGroup",
+                            "key": "UseInactiveColorGroup",
                             "type": "switchbutton",
                             "name": "Use inactive color group",
                             "default": true
                         },
                         {
-                            "key": "dontSaveApplicationTheme",
+                            "key": "DontSaveApplicationTheme",
                             "type": "switchbutton",
                             "name": "Don't save application theme",
                             "default": false
@@ -29,17 +29,17 @@
                     ]
                 },
                 {
-                    "key": "windowSettings",
+                    "key": "WindowSettings",
                     "name": "Window settings",
                     "options": [
                         {
-                            "key": "enableBlur",
+                            "key": "EnableBlur",
                             "name": "Enable window blur",
                             "type": "switchbutton",
                             "default": false
                         },
                         {
-                            "key": "radius",
+                            "key": "Radius",
                             "name": "Window radius",
                             "type": "buttongroup",
                             "items": ["Small","Middle","Large"],

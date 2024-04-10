@@ -333,6 +333,32 @@ void MainWindow::readSettings()
     } else {
         restoreGeometry(geometry);
     }
+
+    bool enableBlur = settings.value("Base.WindowSettings.EnableBlur/value", false).toBool();
+    if (enableBlur) {
+        setAttribute(Qt::WA_TranslucentBackground);
+        auto pa = textEdit->palette();
+        pa.setColor(QPalette::Base, Qt::transparent);
+        textEdit->setPalette(pa);
+        textEdit->viewport()->setPalette(pa);
+        setEnableBlurWindow(enableBlur);
+        titlebar()->setBlurBackground(true);
+    }
+
+    int radius = settings.value("Base.WindowSettings.Radius/value", -1).toInt();
+    switch (radius) {
+    case 0: // small
+        setWindowRadius(0);
+        break;
+    case 1: // middle
+        setWindowRadius(8);
+        break;
+    case 2: // large
+        setWindowRadius(18);
+        break;
+    default:
+        break;
+    }
 }
 //! [35] //! [36]
 

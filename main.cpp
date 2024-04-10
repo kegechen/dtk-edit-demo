@@ -54,10 +54,13 @@
 
 #include <QCommandLineParser>
 #include <QCommandLineOption>
+#include <QSettings>
+#include <DGuiApplicationHelper>
 
 #include "mainwindow.h"
 
 DCORE_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
@@ -67,9 +70,24 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
+    const QString organizationName("deepin") ;
+    const QString applicationName("dtk-edit-demo");
+    QSettings qsettings(organizationName, applicationName);
+    bool colorConfig = qsettings.value("Base.AppSettings.UseInactiveColorGroup/value", true).toBool();
+    bool useInactiveColorGroup = DGuiApplicationHelper::testAttribute(DGuiApplicationHelper::UseInactiveColorGroup);
+    if (colorConfig ^ useInactiveColorGroup) {
+        DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::UseInactiveColorGroup, colorConfig);
+    }
+
+    bool saveConfig = qsettings.value("Base.AppSettings.DontSaveApplicationTheme/value", false).toBool();
+    bool dontSaveApplicationTheme = DGuiApplicationHelper::testAttribute(DGuiApplicationHelper::DontSaveApplicationTheme);
+    if (saveConfig ^ dontSaveApplicationTheme) {
+        DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::DontSaveApplicationTheme, saveConfig);
+    }
+
     DApplication app(argc, argv);
-    app.setOrganizationName("deepin");
-    app.setApplicationName("dtk-edit-demo");
+    app.setOrganizationName(organizationName);
+    app.setApplicationName(applicationName);
 
     // aboutdialog info
     app.setApplicationVersion(DTK_VERSION_STR);
@@ -79,7 +97,8 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon::fromTheme("deepin-editor"));
 
     // Single instance
-    if (!app.setSingleInstance("dtk-edit-demo-key")) {
+    bool enableSingleApp = qsettings.value("Base.AppSettings.SingleApp/value", true).toBool();
+    if (enableSingleApp && !app.setSingleInstance("dtk-edit-demo-key")) {
         qWarning() << "app is already running！";
         return -1;
     }
